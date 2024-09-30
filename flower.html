@@ -300,19 +300,33 @@
     Your browser does not support the audio element.
   </audio>
   
-  <script>
-    // Check if the audio should continue playing from localStorage
-    window.onload = function () {
-      var audioPlayed = localStorage.getItem('audioPlayed');
-      var audio = document.getElementById('audioPlayer');
-      
-      if (audioPlayed === 'true') {
-        var savedTime = localStorage.getItem('audioTime');
-        audio.currentTime = savedTime ? parseFloat(savedTime) : 0;
-        audio.play();
-      }
-    };
-  </script>
+<script>
+  // Check if the audio should continue playing from localStorage
+  window.onload = function () {
+    var audioPlayed = localStorage.getItem('audioPlayed');
+    var audio = document.getElementById('audioPlayer');
+    
+    if (audioPlayed === 'true') {
+      var savedTime = localStorage.getItem('audioTime');
+      audio.currentTime = savedTime ? parseFloat(savedTime) : 0;
+
+      // Autoplay may be restricted; play only if user interaction occurs
+      audio.play().catch(error => {
+        console.log("Autoplay blocked. Play audio after user interaction.");
+      });
+    }
+
+    // Save audio playback time to localStorage every second
+    audio.addEventListener('timeupdate', function () {
+      localStorage.setItem('audioTime', audio.currentTime);
+    });
+
+    // Store the fact that the audio has been played in localStorage
+    audio.addEventListener('play', function () {
+      localStorage.setItem('audioPlayed', 'true');
+    });
+  };
+</script>
 </body>
 
 </html>
