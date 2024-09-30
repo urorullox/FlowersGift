@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -19,7 +20,7 @@
 
   <!-- Button -->
   <div style="position: absolute; top: 60vh; width: 100%; display: flex; justify-content: center;">
-    <a href="flower.html" class="btn">
+    <a href="flower.html" class="btn" onclick="setAudioState()">
       <svg height="24" width="24" fill="#FFFFFF" viewBox="0 0 24 24" data-name="Layer 1" id="Layer_1" class="sparkle">
         <path
           d="M10,21.236,6.755,14.745.264,11.5,6.755,8.255,10,1.764l3.245,6.491L19.736,11.5l-6.491,3.245ZM18,21l1.5,3L21,21l3-1.5L21,18l-1.5-3L18,18l-3,1.5ZM19.333,4.667,20.5,7l1.167-2.333L24,3.5,21.667,2.333,20.5,0,19.333,2.333,17,3.5Z">
@@ -34,23 +35,27 @@
     <i style="color:rgb(228, 221, 219); font-size: 20px;">jess sangat sangat sayang kamuuu diannn ♡♡♡</i>
   </div>
 
-  <p>This is a paragraph.</p>
-
   <!-- Autoplay Music after User Interaction -->
-  <audio id="audioPlayer" controls>
-    <!-- Direct file path for MP3 -->
+  <audio id="audioPlayer" controls style="display: none;">
     <source src="diannn.mp3" type="audio/mpeg">
     Your browser does not support the audio element.
   </audio>
 
   <script src="js/index.js"></script>
-  
+
   <script>
     // Play audio when user clicks anywhere on the page
-    document.body.addEventListener('click', function() {
+    document.body.addEventListener('click', function () {
       var audio = document.getElementById('audioPlayer');
       audio.play();
+      localStorage.setItem('audioPlayed', 'true'); // Save the state
     });
+
+    // Save audio state to localStorage when going to flower.html
+    function setAudioState() {
+      var audio = document.getElementById('audioPlayer');
+      localStorage.setItem('audioTime', audio.currentTime);
+    }
   </script>
 
 </body>
