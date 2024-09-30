@@ -1,5 +1,5 @@
 const title = document.querySelector('.title')
-const text = 'Aku Punya Sesuatu Buat Ceweknya Jess yang sangat lutsyuu'.split('')
+const text = 'Aku Punya Sesuatu Buat Ceweknya Jess yang sangat lutsyuu (ditap dulu yaa layarnyaa sebelum open)'.split('')
 for (let index = 0; index < text.length; index++) {
   if (text[index] !== ' ') {
     title.innerHTML += `<span>${text[index]}<span/>`
