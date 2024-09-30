@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Audio Player</title>
+
+  <script>
+    window.onload = function () {
+      var audio = document.getElementById('audioPlayer');
+      var savedTime = localStorage.getItem('audioTime');
+      var audioPlayed = localStorage.getItem('audioPlayed');
+
+      if (savedTime) {
+        audio.currentTime = parseFloat(savedTime);
+      }
+
+      if (audioPlayed === 'true') {
+        audio.play().catch(function (error) {
+          console.log("Autoplay blocked. User interaction needed.");
+        });
+      }
+
+      audio.addEventListener('timeupdate', function () {
+        localStorage.setItem('audioTime', audio.currentTime);
+      });
+
+      audio.addEventListener('play', function () {
+        localStorage.setItem('audioPlayed', 'true');
+      });
+
+      audio.addEventListener('pause', function () {
+        localStorage.setItem('audioPlayed', 'false');
+      });
+    };
+
+    window.onbeforeunload = function () {
+      var audio = document.getElementById('audioPlayer');
+      localStorage.setItem('audioTime', audio.currentTime);
+      localStorage.setItem('audioPlayed', !audio.paused);
+    };
+  </script>
+</head>
+
+<body>
+  <!-- Hidden Audio Player -->
+  <audio id="audioPlayer" controls autoplay>
+    <source src="diannn.mp3" type="audio/mpeg">
+    Your browser does not support the audio element.
+  </audio>
+</body>
+
+</html>
