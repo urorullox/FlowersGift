@@ -8,20 +8,9 @@
   <link rel="shortcut icon" href="images/gift.png" type="image/x-icon">
   <link rel="stylesheet" href="css/style.css">
 
-  <!-- Document Title -->
   <title>FLOWERS</title>
-</head>
 
-<body class="not-loaded">
-  <!-- Background -->
-  <div class="night"></div>
-
-  <!-- Hidden Audio Player -->
-  <audio id="audioPlayer" controls style="display: none;">
-    <source src="diannn.mp3" type="audio/mpeg">
-    Your browser does not support the audio element.
-  </audio>
-
+  <!-- Add the JavaScript here inside the head section or at the bottom before the closing body tag -->
   <script>
     // Check if the audio should continue playing from localStorage
     window.onload = function () {
@@ -73,8 +62,19 @@
       localStorage.setItem('audioPlayed', !audio.paused);
     };
   </script>
+</head>
 
-<!-- Flower -->
+<body class="not-loaded">
+  <!-- Background -->
+  <div class="night"></div>
+  
+  <!-- Hidden Audio Player (if you already have an audio tag, just keep the id="audioPlayer") -->
+  <audio id="audioPlayer" controls style="display: none;">
+    <source src="diannn.mp3" type="audio/mpeg">
+    Your browser does not support the audio element.
+  </audio>
+
+  <!-- Flower -->
   <div class="flowers">
     <div class="flower flower--1">
       <div class="flower__leafs flower__leafs--1">
@@ -348,12 +348,12 @@
       </div>
     </div>
   </div>
-
   <!-- Title -->
   <h1 class="title"><span id="title"></span></h1>
 
 </body>
 
 </html>
+
 
   <script src="js/main.js"></script>
