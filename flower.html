@@ -10,46 +10,57 @@
 
   <title>FLOWERS</title>
 
-  <!-- Add the JavaScript here inside the head section or at the bottom before the closing body tag -->
+  <!-- Updated Script -->
   <script>
-    // Check if the audio should continue playing from localStorage
+    // This function is executed when the page finishes loading
     window.onload = function () {
       var audio = document.getElementById('audioPlayer');
       var savedTime = localStorage.getItem('audioTime');
       var audioPlayed = localStorage.getItem('audioPlayed');
 
-      // Set the audio to the saved time (if any)
+      // Debugging logs to check if the audio is loading
+      console.log("Audio element loaded:", audio);
+
+      // Check if the saved time exists and set the audio to that point
       if (savedTime) {
         audio.currentTime = parseFloat(savedTime);
+        console.log("Restored audio time:", savedTime);
       }
 
-      // If audio was playing previously, try to play it again
+      // Try to play the audio if it was playing before
       if (audioPlayed === 'true') {
-        audio.play().catch(function (error) {
-          console.log("Autoplay was blocked. Waiting for user interaction to start playback.");
+        audio.play().then(function () {
+          console.log("Audio playback resumed successfully.");
+        }).catch(function (error) {
+          console.log("Autoplay blocked. User interaction needed.");
         });
       }
 
-      // Save the current time on each time update
+      // Listen for the timeupdate event to save the current time to localStorage
       audio.addEventListener('timeupdate', function () {
         localStorage.setItem('audioTime', audio.currentTime);
+        console.log("Audio time updated:", audio.currentTime);
       });
 
-      // When the user plays the audio, mark it as playing
+      // Listen for the play event to mark that audio has been played
       audio.addEventListener('play', function () {
         localStorage.setItem('audioPlayed', 'true');
+        console.log("Audio is playing.");
       });
 
-      // When the user pauses the audio, mark it as paused
+      // Listen for the pause event to mark that audio is paused
       audio.addEventListener('pause', function () {
         localStorage.setItem('audioPlayed', 'false');
+        console.log("Audio is paused.");
       });
 
-      // In case autoplay is blocked, resume playback on any user interaction
+      // Listen for any user interaction to resume playback if blocked
       document.addEventListener('click', function () {
         if (localStorage.getItem('audioPlayed') === 'true' && audio.paused) {
-          audio.play().catch(function (error) {
-            console.log("Autoplay is still blocked after user interaction.");
+          audio.play().then(function () {
+            console.log("Audio playback resumed on user interaction.");
+          }).catch(function (error) {
+            console.log("Autoplay still blocked after interaction:", error);
           });
         }
       });
@@ -60,8 +71,10 @@
       var audio = document.getElementById('audioPlayer');
       localStorage.setItem('audioTime', audio.currentTime);
       localStorage.setItem('audioPlayed', !audio.paused);
+      console.log("Audio state saved before page unload.");
     };
   </script>
+
 </head>
 
 <body class="not-loaded">
