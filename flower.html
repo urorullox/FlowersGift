@@ -16,6 +16,64 @@
   <!-- Background -->
   <div class="night"></div>
 
+  <!-- Hidden Audio Player -->
+  <audio id="audioPlayer" controls style="display: none;">
+    <source src="diannn.mp3" type="audio/mpeg">
+    Your browser does not support the audio element.
+  </audio>
+
+  <script>
+    // Check if the audio should continue playing from localStorage
+    window.onload = function () {
+      var audio = document.getElementById('audioPlayer');
+      var savedTime = localStorage.getItem('audioTime');
+      var audioPlayed = localStorage.getItem('audioPlayed');
+
+      // Set the audio to the saved time (if any)
+      if (savedTime) {
+        audio.currentTime = parseFloat(savedTime);
+      }
+
+      // If audio was playing previously, try to play it again
+      if (audioPlayed === 'true') {
+        audio.play().catch(function (error) {
+          console.log("Autoplay was blocked. Waiting for user interaction to start playback.");
+        });
+      }
+
+      // Save the current time on each time update
+      audio.addEventListener('timeupdate', function () {
+        localStorage.setItem('audioTime', audio.currentTime);
+      });
+
+      // When the user plays the audio, mark it as playing
+      audio.addEventListener('play', function () {
+        localStorage.setItem('audioPlayed', 'true');
+      });
+
+      // When the user pauses the audio, mark it as paused
+      audio.addEventListener('pause', function () {
+        localStorage.setItem('audioPlayed', 'false');
+      });
+
+      // In case autoplay is blocked, resume playback on any user interaction
+      document.addEventListener('click', function () {
+        if (localStorage.getItem('audioPlayed') === 'true' && audio.paused) {
+          audio.play().catch(function (error) {
+            console.log("Autoplay is still blocked after user interaction.");
+          });
+        }
+      });
+    };
+
+    // Store the audio state when the page is unloaded (before reload or navigation)
+    window.onbeforeunload = function () {
+      var audio = document.getElementById('audioPlayer');
+      localStorage.setItem('audioTime', audio.currentTime);
+      localStorage.setItem('audioPlayed', !audio.paused);
+    };
+  </script>
+
 <!-- Flower -->
   <div class="flowers">
     <div class="flower flower--1">
@@ -294,56 +352,6 @@
   <!-- Title -->
   <h1 class="title"><span id="title"></span></h1>
 
-  <!-- Hidden Audio Player -->
-  <audio id="audioPlayer" controls style="display: none;">
-    <source src="diannn.mp3" type="audio/mpeg">
-    Your browser does not support the audio element.
-  </audio>
-  
-<script>
-  // Check if the audio should continue playing from localStorage
-  window.onload = function () {
-    var audio = document.getElementById('audioPlayer');
-
-    // Retrieve saved playback information
-    var audioPlayed = localStorage.getItem('audioPlayed');
-    var savedTime = localStorage.getItem('audioTime');
-    
-    // If audio was previously played and time was saved, set it back
-    if (audioPlayed === 'true' && savedTime !== null) {
-      audio.currentTime = parseFloat(savedTime);
-
-      // Try to autoplay, will fail silently if not allowed by the browser
-      audio.play().catch(error => {
-        console.log("Autoplay blocked, waiting for user interaction.");
-      });
-    }
-
-    // Save the current time every second (timeupdate event)
-    audio.addEventListener('timeupdate', function () {
-      localStorage.setItem('audioTime', audio.currentTime);
-    });
-
-    // Mark audio as played on play event
-    audio.addEventListener('play', function () {
-      localStorage.setItem('audioPlayed', 'true');
-    });
-
-    // Save audio state when the user pauses the audio
-    audio.addEventListener('pause', function () {
-      localStorage.setItem('audioPlayed', 'false');
-    });
-
-    // Restore play state after a user interaction if autoplay was blocked
-    document.body.addEventListener('click', function () {
-      if (localStorage.getItem('audioPlayed') === 'true' && audio.paused) {
-        audio.play().catch(error => {
-          console.log("User interaction failed to trigger autoplay.");
-        });
-      }
-    });
-  };
-</script>
 </body>
 
 </html>
